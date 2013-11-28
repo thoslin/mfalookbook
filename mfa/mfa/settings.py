@@ -12,4 +12,6 @@ SPIDER_MODULES = ['mfa.spiders']
 NEWSPIDER_MODULE = 'mfa.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'mfa (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20120427 Firefox/15.0a1'
+
+DOWNLOAD_DELAY = 10

@@ -5,9 +5,10 @@
 
 from scrapy.item import Item, Field
 
-class MfaItem(Item):
-    # define the fields for your item here like:
-    # name = Field()
-    url = Field()
+
+class MfaCommentItem(Item):
+    post_url = Field()
+    post_timestamp = Field()
     permalink = Field()
     images = Field()
+    point = Field()
