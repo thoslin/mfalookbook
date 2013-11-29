@@ -8,6 +8,7 @@ from scrapy.item import Item, Field
 
 class MfaCommentItem(Item):
     post_url = Field()
+    post_title = Field()
     post_timestamp = Field()
     permalink = Field()
     images = Field()

@@ -22,6 +22,7 @@ class MySpider(CrawlSpider):
         sel = Selector(response)
 
         post_url = response.url[:-10]
+        post_title = sel.xpath("//a[contains(@class, 'title')]/text()")[0].extract()
         post_timestamp = sel.xpath("//time/@datetime")[0].extract()
 
         sel_comment_area = sel.xpath('//div[@class="commentarea"]/div[3]')
@@ -32,6 +33,7 @@ class MySpider(CrawlSpider):
             item = MfaCommentItem()
 
             item["post_url"] = post_url
+            item["post_title"] = post_title
             item["post_timestamp"] = post_timestamp
             item["permalink"] = sel_comment.xpath(".//a[text()='permalink']/@href")[0].extract()
             item["point"] = int(sel_comment.xpath(".//span[@class='score unvoted']/text()")[0].re(r"(\d+) point*")[0])
