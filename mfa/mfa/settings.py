@@ -15,3 +15,7 @@ NEWSPIDER_MODULE = 'mfa.spiders'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20120427 Firefox/15.0a1'
 
 DOWNLOAD_DELAY = 10
+
+ITEM_PIPELINES = {
+    'mfa.pipelines.MfaPipeline': 100,
+}

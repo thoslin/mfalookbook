@@ -36,6 +36,7 @@ class MySpider(CrawlSpider):
             item["post_title"] = post_title
             item["post_timestamp"] = post_timestamp
             item["permalink"] = sel_comment.xpath(".//a[text()='permalink']/@href")[0].extract()
+            item["username"] = sel_comment.xpath(".//a[contains(@class, 'author')]/text()")[0].extract()
             item["point"] = int(sel_comment.xpath(".//span[@class='score unvoted']/text()")[0].re(r"(\d+) point*")[0])
             # TODO crawl dressed.so link
             item["images"] = [

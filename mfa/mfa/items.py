@@ -13,3 +13,4 @@ class MfaCommentItem(Item):
     permalink = Field()
     images = Field()
     point = Field()
+    username = Field()
