@@ -8,6 +8,7 @@ import datetime
 
 engine = create_engine('sqlite:////tmp/mfa.db', echo=True)
 Session = sessionmaker(bind=engine)
+
 Base = declarative_base()
 
 
@@ -64,6 +65,7 @@ def create_comment(session, **kwargs):
                       point=kwargs["point"], images=kwargs["images"])
     session.add(comment)
     session.commit()
+    session.close()
 
 
 def init_db():

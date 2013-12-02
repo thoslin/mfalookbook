@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <!--<header>-->
+    <!--<h1>What Are You Wearing Today?</h1>-->
+    <!--<p>A digest of /r/malefashionadvice/ WAYWT</p>-->
+    <!--</header>-->
+
+    <ul id="tiles">
+    {% for comment in comments %}
+        {% for url, title in comment.images %}
+            <li>
+                <a class="img" href="{{ url }}">
+                    <img src="{{ url }}" width="320">
+                    <span class="cover"></span>
+                </a>
+                <div class="detail">
+                    <div class="title">{{ title }}</div>
+                    <div class="source">
+                        <a href="{{ comment.permalink }}" target="_blank">{{ comment.username }}</a>
+                        + {{ comment.point }}
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    {% endfor %}
+    </ul>
+    <a href="#main" id="scroll-to-top" style="display: inline;"><span>Jump to top</span></a>
+{% endblock %}

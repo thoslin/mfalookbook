@@ -1,0 +1,318 @@
+/** General page styling **/
+html {
+  background-color: #EBECED;
+  font-family: "Helvetica Neue Light", "Helvetica Neue", Arial, sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+#main {
+  margin: 85px 0;
+  position: relative;
+}
+
+header h1 {
+  text-align: center;
+  font-size: 24px;
+  font-weight: normal;
+  margin: 30px 0 3px 0;
+}
+
+header p {
+  text-align: center;
+  font-size: 13px;
+  color: #777;
+  margin: 0;
+}
+
+/**
+ * Grid container
+ */
+#tiles {
+  list-style-type: none;
+  position: relative; /** Needed to ensure items are laid out relative to this container **/
+  margin: 0;
+  padding: 0;
+}
+
+/**
+ * Grid items
+ */
+#tiles li {
+  width: 320px;
+  background-color: #ffffff;
+  border-radius: 3px;
+     -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+    box-shadow: inset 0 0 0 1px #D0D1D2, 0 1px 1px 0 rgba(0, 0, 0, 0.05), 0 0px 1px 1px rgba(0, 0, 0, 0.03);
+    -webkit-box-shadow: inset 0 0 0 1px #D0D1D2, 0 1px 1px 0 rgba(0, 0, 0, 0.05), 0 0px 1px 1px rgba(0, 0, 0, 0.03);
+    -moz-box-shadow: inset 0 0 0 1px #D0D1D2, 0 1px 1px 0 rgba(0, 0, 0, 0.05), 0 0px 1px 1px rgba(0, 0, 0, 0.03);
+  display: none; /** Hide items initially to avoid a flicker effect **/
+  padding-bottom: 4px;
+  overflow: hidden;
+}
+
+#tiles li.inactive {
+  visibility: hidden;
+  opacity: 0;
+  z-index: -1;
+}
+
+#tiles li img {
+    display: block;
+    /*cursor: pointer;*/
+}
+
+#tiles li .img::before
+{
+    display:block;
+    content:'';
+    position:absolute;
+    width:100%;
+    height:100%;
+    box-shadow: inset 1px 1px rgba(0,0,0,0.2),inset -1px 0 0 rgba(0,0,0,0.2);
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+
+#tiles li .img {
+    position: relative;
+    display: block;
+}
+
+/**
+ * Grid item text
+ */
+#tiles li p {
+  color: #666;
+  font-size: 12px;
+  margin: 7px 0 0 7px;
+}
+
+/**
+ * Progress bar for imagesLoaded
+ */
+.progress-bar {
+  background-color: #0BC20B;
+  height: 2px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 0;
+  box-shadow: 0 1px 3px rgba(11, 194, 11, 0.2);
+  -webkit-transition: width 0.3s ease-out;
+     -moz-transition: width 0.3s ease-out;
+       -o-transition: width 0.3s ease-out;
+          transition: width 0.3s ease-out;
+}
+
+/**
+ * Placerholder css
+ */
+.wookmark-placeholder {
+          border-radius: 2px;
+     -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  background-color: #eee;
+  border: 1px solid #dedede;
+  z-index: -1;
+}
+
+nav {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    border-bottom: 1px solid #262932;
+    box-shadow: 0px 0 3px rgba(0,0,0,0.5);
+    background: #3e444e;
+    background: -webkit-linear-gradient(top,#454B56,#393F48);
+    background: -moz-linear-gradient(top,#454B56,#393F48);
+    background: -o-linear-gradient(top,#454B56,#393F48);
+    background-image: -ms-linear-gradient(#454B56,#393F48);
+    transition: left 0.25s ease-out;
+}
+nav p {
+    width: 100%;
+    line-height: 40px;
+    font-size: 16px;
+    text-align: center;
+    font-weight: 200;
+    position: absolute;
+}
+header {
+    margin-top: 85px;
+    margin-bottom: 45px;
+}
+#logo a {
+    font-size: 24px;
+    font-weight: bolder;
+    color: #FFF;
+    text-decoration: none;
+}
+#option {
+  background: transparent url('http://www.wookmark.com/assets/icons/hamburger.png') no-repeat center center;
+  width: 40px;
+  height: 40px;
+  display: block;
+  padding: 0 0 0 5px;
+  float: left;
+}
+.detail {
+    padding: 10px;
+    font-size: 13px;
+}
+.detail .title {
+    color: #373d48;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.detail .source {
+    color: #8a8f9c;
+}
+.detail .source a {
+    text-decoration: none;
+    color: #8a8f9c;
+}
+.detail:hover .source a {
+    color: #1f518e;
+}
+.detail:hover .source {
+    color: #373d48;
+}
+#tiles .cover {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: transparent;
+    -webkit-transition: 0.2s ease;
+    -moz-transition: 0.2s ease;
+    -o-transition: 0.2s ease;
+    transition: 0.2s ease;
+    width: 100%;
+    cursor: pointer;
+}
+#tiles li:hover .cover {
+    background-color: rgba(24,27,32,0.8);
+}
+#scroll-to-top {
+  position: fixed;
+  display: none;
+  bottom: 12px;
+  right: 12px;
+  padding: 0 15px;
+  line-height: 32px;
+  font-size: 12px;
+  background: #d6d8db;
+  color: #7f8184;
+  font-weight: bold;
+  border-radius: 3px;
+  z-index: 9;
+}
+.fancybox-title .title {
+    font-size: 16px;
+    color: #383d48;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+.fancybox-title .source {
+    color: #8a8f9c;
+}
+.fancybox-title .source a {
+    color: #1f518e;
+}
+.fancybox-skin {
+    border: 1px solid rgba(0,0,0,0.2);
+}
+#nav .menu {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+nav ul {
+  float: left;
+}
+nav ul li {
+  position: relative;
+  float: left;
+  border-left: 1px solid #343944;
+  height: 44px;
+  z-index: 1;
+}
+nav ul li:last-child {
+  border-right: 1px solid #343944;
+}
+nav ul a {
+  display: block;
+  line-height: 44px;
+  padding: 0 15px;
+  min-height: 44px;
+  cursor: pointer;
+  color: #c4c7cc;
+  font-size: 13px;
+}
+nav ul a:hover {
+  background: -webkit-linear-gradient(top,#4F555F,#414751);
+  background: -moz-linear-gradient(top,#4F555F,#414751);
+  background: -o-linear-gradient(top,#4F555F,#414751);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4f555f',endColorstr='#414751');
+  background-image: -ms-linear-gradient(#4F555F,#414751);
+  color: white;
+}
+#logo a:hover {
+  color: #c4c7cc;
+  transition: 0.2s ease;
+}
+#logo a, header {
+  font-family: 'Dosis', sans-serif;
+}
+#page {
+  margin: 0 auto;
+  width: 940px;
+  background: #fff;
+  border-radius: 3px 3px 0 0;
+  box-shadow: 0 0 3px rgba(0,0,0,.09), 0 1px 2px rgba(0,0,0,.1);
+  -moz-box-shadow: 0 0 3px rgba(0,0,0,.09), 0 1px 2px rgba(0,0,0,.1);
+  -webkit-box-shadow: 0 0 3px rgba(0,0,0,.09), 0 1px 2px rgba(0,0,0,.1);
+}
+#page .title {
+  border-bottom: 1px solid #ebecef;
+  padding: 18px 25px 17px;
+  font-weight: normal;
+  color: #6e7176;
+  font-size: 18px;
+}
+#page .content {
+  padding: 35px 60px;
+}
+#page h2 {
+  font-size: 24px;
+  line-height: 30px;
+  padding-bottom: 25px;
+  color: #22324e;
+}
+#page ol li a {
+  line-height: 30px;
+  font-size: 18px;
+  color: #1f518e;
+}
+#page ol li a:hover {
+  text-decoration: underline;
+}
+#page ol li {
+  float: left;
+  width: 65px
+}
+#page ol {
+  float: left;
+  padding: 0 10px 20px;
+}
+#page .content {
+  overflow: auto;
+}
