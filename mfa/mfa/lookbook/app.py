@@ -12,6 +12,8 @@ def thumbnail(url, size="m"):
     parts = url.rsplit(".", 1)
     if len(parts) == 2:
         _size = "%s." % size
+        if "com" in parts[1]:
+            return url + "%sjpg" % _size
         return _size.join(parts)
     return url
 env.filters["thumbnail"] = thumbnail

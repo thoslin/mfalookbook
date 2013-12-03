@@ -98,6 +98,10 @@
                     this.title = $(this.element).parent().find(".detail").html();
                 }
             });
+
+            $("img").error(function(){
+                $(this).hide();
+            });
         })();
     </script>
 </body>
