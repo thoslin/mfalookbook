@@ -7,7 +7,6 @@ import calendar
 
 app = Flask(__name__)
 env = Environment(loader=PackageLoader('mfa.lookbook', 'templates'))
-month_abbr = dict((k, v) for k, v in enumerate(calendar.month_abbr))
 
 
 def thumbnail(url, size="m"):
@@ -22,8 +21,10 @@ def thumbnail(url, size="m"):
 env.filters["thumbnail"] = thumbnail
 
 
-def number_to_month(i):
-    return month_abbr.get(i)
+def number_to_month(i, abbr=False):
+    if abbr:
+        return calendar.month_abbr[i]
+    return calendar.month_name[i]
 env.filters["number_to_month"] = number_to_month
 
 
@@ -47,3 +48,14 @@ def archive():
 
     return render_template(env.get_template("archive.html"),
                            archive=archive)
+
+
+@app.route("/archive/<int:year>/<int:month>/")
+def month_archive(year, month):
+    session = Session()
+    posts = session.query(Post).filter(extract("year", Post.timestamp) == year,
+                                       extract("month", Post.timestamp) == month)
+    session.close()
+
+    return render_template(env.get_template("month_archive.html"),
+                           posts=posts, year=year, month=month)

@@ -298,12 +298,12 @@ nav ul a:hover {
   padding-bottom: 25px;
   color: #22324e;
 }
-#page ol li a {
+#page li a {
   line-height: 30px;
   font-size: 18px;
   color: #1f518e;
 }
-#page ol li a:hover {
+#page li a:hover {
   text-decoration: underline;
 }
 #page ol li {
@@ -313,6 +313,9 @@ nav ul a:hover {
 #page ol {
   float: left;
   padding: 0 10px 20px;
+}
+#page ul {
+  list-style: none;
 }
 #page .content {
   overflow: auto;

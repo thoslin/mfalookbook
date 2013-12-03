@@ -9,7 +9,7 @@
             <ol>
                 {% for archive in group.list %}
                 <li>
-                    <a href="/archive/{{ archive.year }}/{{ archive.month }}">{{ archive.month|number_to_month }}</a>
+                    <a href="/archive/{{ archive.year }}/{{ archive.month }}/">{{ archive.month|number_to_month(True) }}</a>
                 </li>
                 {% endfor %}
             </ol>
