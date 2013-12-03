@@ -4,84 +4,16 @@
     <div id="page">
         <div class="title">Archive</div>
         <div class="content">
-            <h2>2013</h2>
+            {% for group in archive|groupby("year") %}
+            <h2>{{ group.grouper }}</h2>
             <ol>
+                {% for archive in group.list %}
                 <li>
-                    <a href="#">Jan</a>
+                    <a href="/archive/{{ archive.year }}/{{ archive.month }}">{{ archive.month|number_to_month }}</a>
                 </li>
-                <li>
-                    <a href="#">Feb</a>
-                </li>
-                <li>
-                    <a href="#">Mar</a>
-                </li>
-                <li>
-                    <a href="#">Apr</a>
-                </li>
-                <li>
-                    <a href="#">May</a>
-                </li>
-                <li>
-                    <a href="#">Jun</a>
-                </li>
-                <li>
-                    <a href="#">Jul</a>
-                </li>
-                <li>
-                    <a href="#">Aug</a>
-                </li>
-                <li>
-                    <a href="#">Sep</a>
-                </li>
-                <li>
-                    <a href="#">Oct</a>
-                </li>
-                <li>
-                    <a href="#">Nov</a>
-                </li>
-                <li>
-                    <a href="#">Dec</a>
-                </li>
+                {% endfor %}
             </ol>
-            <h2>2012</h2>
-            <ol>
-                <li>
-                    <a href="#">Jan</a>
-                </li>
-                <li>
-                    <a href="#">Feb</a>
-                </li>
-                <li>
-                    <a href="#">Mar</a>
-                </li>
-                <li>
-                    <a href="#">Apr</a>
-                </li>
-                <li>
-                    <a href="#">May</a>
-                </li>
-                <li>
-                    <a href="#">Jun</a>
-                </li>
-                <li>
-                    <a href="#">Jul</a>
-                </li>
-                <li>
-                    <a href="#">Aug</a>
-                </li>
-                <li>
-                    <a href="#">Sep</a>
-                </li>
-                <li>
-                    <a href="#">Oct</a>
-                </li>
-                <li>
-                    <a href="#">Nov</a>
-                </li>
-                <li>
-                    <a href="#">Dec</a>
-                </li>
-            </ol>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
