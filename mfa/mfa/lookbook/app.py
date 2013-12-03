@@ -28,10 +28,15 @@ def number_to_month(i, abbr=False):
 env.filters["number_to_month"] = number_to_month
 
 
+@app.route("/posts/<int:post_id>/")
 @app.route("/")
-def index():
+def index(post_id=None):
     session = Session()
-    comments = session.query(Comment).order_by("-point")[:15]
+    if post_id:
+        comments = (session.query(Comment).filter(Post.id == post_id)
+                           .order_by("-point")[:15])
+    else:
+        comments = session.query(Comment).order_by("-point")[:15]
     session.close()
     return render_template(env.get_template("index.html"),
                            comments=comments)
