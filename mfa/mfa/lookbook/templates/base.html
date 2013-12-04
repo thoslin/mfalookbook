@@ -54,6 +54,12 @@
                  * When scrolled all the way to the bottom, add more tiles.
                  */
                 function onScroll(event) {
+                    if ($(window).scrollTop() > 800) {
+                        $('#scroll-to-top').stop(true, true).fadeIn();
+                    } else {
+                        $('#scroll-to-top').stop(true, true).fadeOut();
+                    }
+
                     // Check if we're within 100 pixels of the bottom edge of the broser window.
                     var winHeight = window.innerHeight ? window.innerHeight : $(window).height(); // iphone fix
                     var closeToBottom = ($(window).scrollTop() + winHeight > $(document).height() - 100);
@@ -106,6 +112,11 @@
 
             $("img").error(function(){
                 $(this).hide();
+            });
+
+            $("#scroll-to-top").click(function(e){
+                e.preventDefault();
+                $("html, body").animate({ scrollTop: 0 }, "slow");
             });
         })();
     </script>
