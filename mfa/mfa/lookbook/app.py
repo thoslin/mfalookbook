@@ -1,9 +1,10 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from jinja2 import Environment, PackageLoader
 from sqlalchemy import extract
 from ..models import Session, Comment, Post
 
 import calendar
+import math
 
 app = Flask(__name__)
 env = Environment(loader=PackageLoader('mfa.lookbook', 'templates'))
@@ -28,18 +29,28 @@ def number_to_month(i, abbr=False):
 env.filters["number_to_month"] = number_to_month
 
 
+def paginate(query, page, per_page=15):
+    total_pages = int(math.ceil(query.count()/float(per_page)))
+    if not page:
+        page = 1
+    page = int(page)
+    if page > total_pages or page < 1:
+        return []
+    return query[(page-1)*per_page:page*per_page]
+
+
 @app.route("/posts/<int:post_id>/")
 @app.route("/")
 def index(post_id=None):
     session = Session()
     if post_id:
         comments = (session.query(Comment).filter(Post.id == post_id)
-                           .order_by("-point")[:15])
+                           .order_by("-point"))
     else:
-        comments = session.query(Comment).order_by("-point")[:15]
+        comments = session.query(Comment).order_by("-point")
     session.close()
     return render_template(env.get_template("index.html"),
-                           comments=comments)
+                           comments=paginate(comments, request.args.get("page")))
 
 
 @app.route("/archive/")
