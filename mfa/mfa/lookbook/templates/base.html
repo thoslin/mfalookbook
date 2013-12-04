@@ -27,6 +27,7 @@
         (function () {
             $('#tiles').imagesLoaded(function () {
                 var handler = null;
+                var next_page = 2;
 
                 // Prepare layout options.
                 var options = {
@@ -57,13 +58,17 @@
                     var winHeight = window.innerHeight ? window.innerHeight : $(window).height(); // iphone fix
                     var closeToBottom = ($(window).scrollTop() + winHeight > $(document).height() - 100);
 
-                    if (closeToBottom) {
-                        // Get the first then items from the grid, clone them, and add them to the bottom of the grid.
-                        var items = $('#tiles li'),
-                                firstTen = items.slice(0, 10);
-                        $('#tiles').append(firstTen.clone());
-
-                        applyLayout();
+                    if (closeToBottom && next_page!=0) {
+                        $.getJSON(window.location.pathname, {page: next_page, ajax: true}, function(data){
+                            next_page = data.next_page;
+                            if(data.comments) {
+                                $("#tiles").append(data.comments);
+                                $("img").error(function(){
+                                    $(this).hide();
+                                });
+                                applyLayout();
+                            }
+                        });
                     }
                 };
 

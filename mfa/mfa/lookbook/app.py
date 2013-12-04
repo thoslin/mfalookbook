@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from jinja2 import Environment, PackageLoader
 from sqlalchemy import extract
 from ..models import Session, Comment, Post
@@ -31,26 +31,29 @@ env.filters["number_to_month"] = number_to_month
 
 def paginate(query, page, per_page=15):
     total_pages = int(math.ceil(query.count()/float(per_page)))
-    if not page:
-        page = 1
-    page = int(page)
     if page > total_pages or page < 1:
-        return []
-    return query[(page-1)*per_page:page*per_page]
+        return [], 0
+    return query[(page-1)*per_page:page*per_page], page + 1
 
 
-@app.route("/posts/<int:post_id>/")
-@app.route("/")
+@app.route("/posts/<int:post_id>/", methods=["GET"])
+@app.route("/", methods=["GET"])
 def index(post_id=None):
     session = Session()
     if post_id:
-        comments = (session.query(Comment).filter(Post.id == post_id)
-                           .order_by("-point"))
+        query = (session.query(Comment).filter(Post.id == post_id)
+                        .order_by("-point"))
     else:
-        comments = session.query(Comment).order_by("-point")
+        query = session.query(Comment).order_by("-point")
+    comments, next_page = paginate(query, request.args.get("page", 1, type=int))
+    if "ajax" in request.args:
+        return jsonify(
+            comments=render_template(env.get_template('tiles.html'), comments=comments),
+            next_page=next_page
+        )
     session.close()
     return render_template(env.get_template("index.html"),
-                           comments=paginate(comments, request.args.get("page")))
+                           comments=comments)
 
 
 @app.route("/archive/")

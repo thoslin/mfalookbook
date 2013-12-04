@@ -7,23 +7,7 @@
     <!--</header>-->
 
     <ul id="tiles">
-    {% for comment in comments %}
-        {% for url, title in comment.images %}
-            <li>
-                <a class="img" href="{{ url|thumbnail('l') }}">
-                    <img src="{{ url|thumbnail('l') }}" width="320">
-                    <span class="cover"></span>
-                </a>
-                <div class="detail">
-                    <div class="title">{{ title }}</div>
-                    <div class="source">
-                        <a href="{{ comment.permalink }}" target="_blank">{{ comment.username }}</a>
-                        + {{ comment.point }}
-                    </div>
-                </div>
-            </li>
-        {% endfor %}
-    {% endfor %}
+        {% include "tiles.html" %}
     </ul>
     <a href="#main" id="scroll-to-top" style="display: inline;"><span>Jump to top</span></a>
 {% endblock %}
