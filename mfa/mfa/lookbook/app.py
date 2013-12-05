@@ -41,7 +41,7 @@ def paginate(query, page, per_page=15):
 def index(post_id=None):
     session = Session()
     if post_id:
-        query = (session.query(Comment).filter(Post.id == post_id)
+        query = (session.query(Comment).filter(Comment.post_id == post_id)
                         .order_by("-point"))
     else:
         query = session.query(Comment).order_by("-point")

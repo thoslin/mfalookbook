@@ -19,3 +19,5 @@ DOWNLOAD_DELAY = 10
 ITEM_PIPELINES = {
     'mfa.pipelines.MfaPipeline': 100,
 }
+
+DUPEFILTER_CLASS = "mfa.dupefilter.DBRDupeFilter"

@@ -25,13 +25,17 @@ class Comment(Base):
     __tablename__ = "comments"
 
     id = Column(Integer, primary_key=True)
-    post_id = Column(Integer, ForeignKey("posts.id"))
+    post_id = Column(Integer, ForeignKey("posts.id",
+                                         onupdate="CASCADE", ondelete="CASCADE"))
     permalink = Column(String)
     username = Column(String)
     point = Column(Integer)
     images = Column(PickleType)
 
     post = relationship("Post", backref=backref("comments", lazy="dynamic"))
+
+    def __repr__(self):
+        return "<%s>:%s" % (self.username, self.permalink)
 
 
 def create_comment(session, **kwargs):
