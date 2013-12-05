@@ -11,3 +11,116 @@
     </ul>
     <a href="#main" id="scroll-to-top" style="display: none;"><span>Jump to top</span></a>
 {% endblock %}
+
+{% block script %}
+    <script src="http://cdn.staticfile.org/jquery/2.0.3/jquery.js"></script>
+    <script src="http://cdn.staticfile.org/imagesloaded/3.0.4/imagesloaded.pkgd.js"></script>
+    <script src="http://cdn.staticfile.org/jquery.wookmark/1.3.1/jquery.wookmark.min.js"></script>
+    <script src="http://cdn.staticfile.org/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+    <script>
+        (function () {
+            $('#tiles').imagesLoaded(function () {
+                var handler = null;
+                var next_page = 2;
+
+                // Prepare layout options.
+                var options = {
+                    autoResize: true, // This will auto-update the layout when the browser window is resized.
+                    container: $('#main'), // Optional, used for some extra CSS styling
+                    offset: 15, // Optional, the distance between grid items
+                    itemWidth: 300 // Optional, the width of a grid item
+                };
+
+                function applyLayout() {
+                    $('#tiles').imagesLoaded(function () {
+                        // Destroy the old handler
+                        if (handler.wookmarkInstance) {
+                            handler.wookmarkInstance.clear();
+                        }
+
+                        // Create a new layout handler.
+                        handler = $('#tiles li');
+                        handler.wookmark(options);
+                    });
+                }
+
+                /**
+                 * When scrolled all the way to the bottom, add more tiles.
+                 */
+                function onScroll(event) {
+                    if ($(window).scrollTop() > 800) {
+                        $('#scroll-to-top').stop(true, true).fadeIn();
+                    } else {
+                        $('#scroll-to-top').stop(true, true).fadeOut();
+                    }
+
+                    // Check if we're within 100 pixels of the bottom edge of the broser window.
+                    var winHeight = window.innerHeight ? window.innerHeight : $(window).height(); // iphone fix
+                    var closeToBottom = ($(window).scrollTop() + winHeight > $(document).height() - 100);
+
+                    if (closeToBottom && next_page!=0) {
+                        $.getJSON(window.location.pathname, {page: next_page, ajax: true}, function(data){
+                            next_page = data.next_page;
+                            if(data.comments) {
+                                $("#tiles").append(data.comments);
+                                applyLayout();
+                                $("img").error(function(){
+                                    $(this).hide();
+                                });
+                            }
+                        });
+                    }
+                };
+
+                // Capture scroll event.
+                $(window).bind('scroll', onScroll);
+
+                // Call the layout function.
+                handler = $('#tiles li');
+                handler.wookmark(options);
+            });
+
+            $.ajaxSetup({
+                beforeSend: function() {
+                    $("body").append('<div id="fancybox-loading"><div></div></div>');
+                },
+                complete: function() {
+                    $("#fancybox-loading").remove();
+                }
+            });
+
+            //fancybox
+            $(".img").fancybox({
+                type: "image",
+                padding: 20,
+                closeBtn: false,
+                openEffect: 'fade',
+                closeEffect: 'elastic',
+
+                helpers: {
+                    title: {
+                        type: 'inside'
+                    },
+                    overlay: {
+                        css: {
+                            'background': 'rgba(24,27,32,0.8)'
+                        }
+                    }
+                },
+
+                beforeLoad: function () {
+                    this.title = $(this.element).parent().find(".detail").html();
+                }
+            });
+
+            $("img").error(function(){
+                $(this).hide();
+            });
+
+            $("#scroll-to-top").click(function(e){
+                e.preventDefault();
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+            });
+        })();
+    </script>
+{% endblock %}

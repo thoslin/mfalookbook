@@ -1,32 +1,44 @@
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+    #main {
+        margin: 65px 0 !important;
+        width: 100% !important;
+    }
+    #page {
+        width: 90% !important;
+    }
+    #page .content {
+        padding: 1em 2em !important;
+    }
+    #tiles .cover {
+        height: 0 !important;
+        width: 0 !important;
+    }
+}
 /** General page styling **/
 html {
   background-color: #EBECED;
   font-family: "Helvetica Neue Light", "Helvetica Neue", Arial, sans-serif;
 }
-
 a {
   text-decoration: none;
 }
-
 #main {
-  margin: 85px 0;
+  margin: 85px auto;
+  width: 960px;
   position: relative;
 }
-
 header h1 {
   text-align: center;
   font-size: 24px;
   font-weight: normal;
   margin: 30px 0 3px 0;
 }
-
 header p {
   text-align: center;
   font-size: 13px;
   color: #777;
   margin: 0;
 }
-
 /**
  * Grid container
  */
@@ -36,12 +48,11 @@ header p {
   margin: 0;
   padding: 0;
 }
-
 /**
  * Grid items
  */
 #tiles li {
-  width: 320px;
+  width: 300px;
   background-color: #ffffff;
   border-radius: 3px;
      -moz-border-radius: 3px;
@@ -53,18 +64,15 @@ header p {
   padding-bottom: 4px;
   overflow: hidden;
 }
-
 #tiles li.inactive {
   visibility: hidden;
   opacity: 0;
   z-index: -1;
 }
-
 #tiles li img {
     display: block;
     /*cursor: pointer;*/
 }
-
 #tiles li .img::before
 {
     display:block;
@@ -77,12 +85,10 @@ header p {
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
 }
-
 #tiles li .img {
     position: relative;
     display: block;
 }
-
 /**
  * Grid item text
  */
@@ -91,7 +97,6 @@ header p {
   font-size: 12px;
   margin: 7px 0 0 7px;
 }
-
 /**
  * Progress bar for imagesLoaded
  */
@@ -109,19 +114,6 @@ header p {
        -o-transition: width 0.3s ease-out;
           transition: width 0.3s ease-out;
 }
-
-/**
- * Placerholder css
- */
-.wookmark-placeholder {
-          border-radius: 2px;
-     -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  background-color: #eee;
-  border: 1px solid #dedede;
-  z-index: -1;
-}
-
 nav {
     position: fixed;
     width: 100%;
@@ -274,7 +266,7 @@ nav ul a:hover {
 }
 #page {
   margin: 0 auto;
-  width: 940px;
+  width: 80%;
   background: #fff;
   border-radius: 3px 3px 0 0;
   box-shadow: 0 0 3px rgba(0,0,0,.09), 0 1px 2px rgba(0,0,0,.1);
