@@ -86,6 +86,15 @@
                 handler.wookmark(options);
             });
 
+            $.ajaxSetup({
+                beforeSend: function() {
+                    $("body").append('<div id="fancybox-loading"><div></div></div>');
+                },
+                complete: function() {
+                    $("#fancybox-loading").remove();
+                }
+            });
+
             //fancybox
             $(".img").fancybox({
                 type: "image",
