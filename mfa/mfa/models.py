@@ -1,15 +1,17 @@
 from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy import Column, Integer, String, DateTime, PickleType
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import backref, relationship, sessionmaker
+from sqlalchemy.orm import backref, relationship, sessionmaker, scoped_session
 
 import datetime
 
 
-engine = create_engine('sqlite:////tmp/mfa.db', echo=True)
+engine = create_engine('sqlite:////mfa.db', echo=True)
 Session = sessionmaker(bind=engine)
+db_session = scoped_session(Session)
 
 Base = declarative_base()
+Base.query = db_session.query_property()
 
 
 class Post(Base):

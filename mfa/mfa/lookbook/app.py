@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from jinja2 import Environment, PackageLoader
 from sqlalchemy import extract
-from ..models import Session, Comment, Post
+from ..models import Comment, Post, db_session
 
 import calendar
 import math
@@ -48,31 +48,26 @@ def paginate(query, page, per_page=15):
 @app.route("/posts/<int:post_id>/", methods=["GET"])
 @app.route("/", methods=["GET"])
 def index(post_id=None):
-    session = Session()
     if post_id:
-        query = (session.query(Comment).filter(Comment.post_id == post_id)
-                        .order_by("-point"))
+        query = Comment.query.filter(Comment.post_id == post_id).order_by("-point")
     else:
-        query = session.query(Comment).order_by("-point")
+        query = Comment.query.order_by("-point")
     comments, next_page = paginate(query, request.args.get("page", 1, type=int))
     if "ajax" in request.args:
         return jsonify(
             comments=render_template(env.get_template('tiles.html'), comments=comments),
             next_page=next_page
         )
-    session.close()
     return render_template(env.get_template("index.html"),
                            comments=comments)
 
 
 @app.route("/archive/")
 def archive():
-    session = Session()
-    archive = (session.query(extract("year", Post.timestamp).label("year"),
-                             extract("month", Post.timestamp).label("month"))
-                      .group_by("year", "month")
-                      .order_by("-year", "-month"))
-    session.close()
+    archive = (db_session.query(extract("year", Post.timestamp).label("year"),
+                                extract("month", Post.timestamp).label("month"))
+                         .group_by("year", "month")
+                         .order_by("-year", "-month"))
 
     return render_template(env.get_template("archive.html"),
                            archive=archive)
@@ -80,10 +75,13 @@ def archive():
 
 @app.route("/archive/<int:year>/<int:month>/")
 def month_archive(year, month):
-    session = Session()
-    posts = session.query(Post).filter(extract("year", Post.timestamp) == year,
+    posts = Post.query.filter(extract("year", Post.timestamp) == year,
                                        extract("month", Post.timestamp) == month)
-    session.close()
 
     return render_template(env.get_template("month_archive.html"),
                            posts=posts, year=year, month=month)
+
+
+@app.teardown_appcontext
+def shutdown_session():
+    db_session.remove()
