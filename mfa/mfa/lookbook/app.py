@@ -51,7 +51,7 @@ def index(post_id=None):
     if post_id:
         query = Comment.query.filter(Comment.post_id == post_id).order_by("-point")
     else:
-        query = Comment.query.order_by("-point")
+        query = Comment.query.order_by(Comment.pub_date.desc(), Comment.point.desc())
     comments, next_page = paginate(query, request.args.get("page", 1, type=int))
     if "ajax" in request.args:
         return jsonify(
@@ -64,8 +64,8 @@ def index(post_id=None):
 
 @app.route("/archive/")
 def archive():
-    archive = (db_session.query(extract("year", Post.timestamp).label("year"),
-                                extract("month", Post.timestamp).label("month"))
+    archive = (db_session.query(extract("year", Post.pub_date).label("year"),
+                                extract("month", Post.pub_date).label("month"))
                          .group_by("year", "month")
                          .order_by("-year", "-month"))
 
@@ -75,13 +75,13 @@ def archive():
 
 @app.route("/archive/<int:year>/<int:month>/")
 def month_archive(year, month):
-    posts = Post.query.filter(extract("year", Post.timestamp) == year,
-                                       extract("month", Post.timestamp) == month)
+    posts = Post.query.filter(extract("year", Post.pub_date) == year,
+                                       extract("month", Post.pub_date) == month)
 
     return render_template(env.get_template("month_archive.html"),
                            posts=posts, year=year, month=month)
 
 
 @app.teardown_appcontext
-def shutdown_session():
+def shutdown_session(exception=None):
     db_session.remove()

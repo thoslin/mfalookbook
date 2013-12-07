@@ -6,7 +6,7 @@ from sqlalchemy.orm import backref, relationship, sessionmaker, scoped_session
 import datetime
 
 
-engine = create_engine('sqlite:////tmp/mfa.db', echo=True)
+engine = create_engine('sqlite:///mfa.db', echo=True)
 Session = sessionmaker(bind=engine)
 db_session = scoped_session(Session)
 
@@ -20,7 +20,7 @@ class Post(Base):
     id = Column(Integer, primary_key=True)
     permalink = Column(String)
     title = Column(String)
-    timestamp = Column(DateTime)
+    pub_date = Column(DateTime)
 
 
 class Comment(Base):
@@ -33,6 +33,7 @@ class Comment(Base):
     username = Column(String)
     point = Column(Integer)
     images = Column(PickleType)
+    pub_date = Column(DateTime)
 
     post = relationship("Post", backref=backref("comments", lazy="dynamic"))
 
@@ -64,11 +65,12 @@ def create_comment(session, **kwargs):
     if not post:
         timestamp = datetime.datetime.strptime(kwargs["post_timestamp"][:-6], "%Y-%m-%dT%H:%M:%S")
         post = Post(title=kwargs["post_title"], permalink=kwargs["post_url"],
-                    timestamp=timestamp)
+                    pub_date=timestamp)
         session.add(post)
 
-    comment = Comment(post=post, permalink=kwargs["permalink"], username=kwargs["username"],
-                      point=kwargs["point"], images=kwargs["images"])
+    comment = Comment(post=post, permalink=kwargs["permalink"],
+                      username=kwargs["username"], point=kwargs["point"],
+                      images=kwargs["images"], pub_date=post.pub_date)
     session.add(comment)
     session.commit()
     session.close()
@@ -76,6 +78,8 @@ def create_comment(session, **kwargs):
 
 def init_db():
     Base.metadata.create_all(bind=engine)
+
+init_db()
 
 
 if __name__ == "__main__":
