@@ -1,6 +1,6 @@
 from scrapy import log
 from scrapy.dupefilter import BaseDupeFilter
-from .models import Session, Post
+from lookbook.models import Session, Post
 
 
 class DBRDupeFilter(BaseDupeFilter):

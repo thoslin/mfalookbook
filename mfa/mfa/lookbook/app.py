@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from jinja2 import Environment, PackageLoader
 from sqlalchemy import extract
-from ..models import Comment, Post, db_session
+from .models import Comment, Post, db_session
 
 import calendar
 import math

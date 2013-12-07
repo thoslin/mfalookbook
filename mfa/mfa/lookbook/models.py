@@ -6,7 +6,7 @@ from sqlalchemy.orm import backref, relationship, sessionmaker, scoped_session
 import datetime
 
 
-engine = create_engine('sqlite:////mfa.db', echo=True)
+engine = create_engine('sqlite:////tmp/mfa.db', echo=True)
 Session = sessionmaker(bind=engine)
 db_session = scoped_session(Session)
 
