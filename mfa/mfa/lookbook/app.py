@@ -5,6 +5,7 @@ from ..models import Session, Comment, Post
 
 import calendar
 import math
+import urlparse
 
 app = Flask(__name__)
 env = Environment(loader=PackageLoader('mfa.lookbook', 'templates'))
@@ -20,6 +21,14 @@ def thumbnail(url, size="m"):
         return _size.join(parts)
     return url
 env.filters["thumbnail"] = thumbnail
+
+
+def album(url):
+    url, fragment = urlparse.urldefrag(url)
+    if url.endswith("/"):
+        url = url[:-1]
+    return url + "/embed"
+env.filters["album"] = album
 
 
 def number_to_month(i, abbr=False):

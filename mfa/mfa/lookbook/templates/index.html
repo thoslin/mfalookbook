@@ -112,6 +112,9 @@
                     this.title = $(this.element).parent().find(".detail").html();
                 }
             });
+            $(".album").fancybox({
+                type: "iframe"
+            });
 
             $("img").error(function(){
                 $(this).hide();
