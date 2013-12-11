@@ -60,6 +60,9 @@ def setup_nginx():
     sudo("service nginx restart")
 
 
+def setup_cron():
+    sudo('crontab < /home/mfa/src/mfa/mfa/lookbook/config/mfa_cronjob', user="mfa")
+
 def remove_ssh_keys():
     sudo("rm /home/mfa/.ssh -rf")
 
@@ -72,6 +75,7 @@ def deploy():
     setup_virtualenv()
     setup_supervisor()
     setup_nginx()
+    setup_cron()
     remove_ssh_keys()
 
 
