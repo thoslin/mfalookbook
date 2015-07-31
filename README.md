@@ -1,5 +1,7 @@
+[![Build Status](https://travis-ci.org/thoslin/mfalookbook.svg?branch=master)](https://travis-ci.org/thoslin/mfalookbook)
+
 mfalookbook
-===========
+==========================
 This is a project I built to try out some technologies like [Flask](flask.pocoo.org), [SQLAlchemy](http://www.sqlalchemy.org/), [Scrapy](http://scrapy.org/) which I've heard for long but never used before.
 
 So basically I scraped data from [/r/malefashionadvice](http://reddit.com/r/malefashionadvice/) with Scrapy and display the data on a site built with Flask. The data is stored in Sqlite and driven by SQLAlchemy. Besides I write a [fabric](http://fabfile.org) script to easily deploy the whole thing to a [Vagrant](http://www.vagrantup.com) box (or your ubuntu server if you've got one).
