@@ -30,3 +30,7 @@ fab vagrant deploy
 ```
 
 That's it. Happy hacking!
+
+.. |build-status| image:: https://travis-ci.org/thoslin/mfalookbook.svg?branch=master
+    :target: https://travis-ci.org/thoslin/mfalookbook
+    :alt: Build status
