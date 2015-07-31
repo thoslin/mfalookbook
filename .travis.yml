@@ -2,4 +2,4 @@ language: python
 python:
   - 2.7
 install:
-  - pip install -r mfa/requirements.pip
+  - pip install -r mfalookbook/mfa/requirements.txt
