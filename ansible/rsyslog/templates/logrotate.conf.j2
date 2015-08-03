@@ -1,0 +1,11 @@
+/var/log/*{{ rsyslog_conf.programname }}.log {
+        daily
+        missingok
+        rotate 14
+        compress
+        delaycompress
+        notifempty
+        postrotate
+                reload rsyslog >/dev/null 2>&1 || true
+        endscript
+}

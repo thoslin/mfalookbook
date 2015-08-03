@@ -1,0 +1,14 @@
+- name: Add uwsgi ppa
+  apt_repository: repo='ppa:chris-lea/uwsgi'
+
+- name: Install uwsgi package
+  apt: package=uwsgi update_cache=yes
+
+- name: Configure uwsgi
+  template: src=../uwsgi/templates/uwsgi.ini.j2 dest={{ app_dir }}/uwsgi-90${item}.ini mode=0644
+  with_sequence: start=1 end={{ uwsgi_num_instance }} format=%02d
+
+- name: Create upstart script
+  action: template src=../uwsgi/templates/uwsgi-upstart.conf.j2 dest=/etc/init/{{ app_name }}.conf mode=0644
+  notify:
+    - Restart uwsgi

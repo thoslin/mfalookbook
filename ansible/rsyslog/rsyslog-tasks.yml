@@ -1,0 +1,9 @@
+- name: Configure rsyslog for {{ app_name }}
+  action: template src=../rsyslog/templates/rsyslog-client.conf.j2 dest=/etc/rsyslog.d/${rsyslog_id}-${rsyslog_programname}-remote.conf
+  notify:
+    - Restart rsyslog
+  when_set: ${rsyslog_conf}
+
+- name: Configure logrotate for {{ app_name }}
+  action: template src=../rsyslog/templates/logrotate.conf.j2 dest=/etc/logrotate.d/${rsyslog_id}-${rsyslog_programname}
+  when_set: ${rsyslog_conf}

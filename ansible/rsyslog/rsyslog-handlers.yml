@@ -1,0 +1,9 @@
+- name: Start rsyslog
+  action: service name=rsyslog state=started enabled=true
+
+- name: Reload rsyslog
+  action: service name=rsyslog state=reloaded
+
+- name: Restart rsyslog
+  action: service name=rsyslog state=restarted
+

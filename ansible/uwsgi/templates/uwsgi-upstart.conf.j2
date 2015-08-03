@@ -1,0 +1,10 @@
+# simple uWSGI script
+
+description "uwsgi for {{ app_name }}"
+start on runlevel [2345]
+stop on runlevel [06]
+
+limit nofile 100000 100000
+
+#In emperor mode ini files and python path is expected to be same
+exec start-stop-daemon --start --exec /usr/bin/uwsgi -- --pythonpath {{ app_dir }} --emperor {{ app_dir }} --die-on-term

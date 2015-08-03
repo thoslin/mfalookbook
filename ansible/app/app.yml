@@ -1,0 +1,57 @@
+- hosts: mfalookbook-app
+  #remote_user: ubuntu
+  user: ubuntu
+  sudo: yes
+  vars:
+    app_name: mfalookbook
+    deploy_base: /mnt/deploy
+    app_dir: ${deploy_base}/${app_name}
+    venv_dir: ${app_dir}/.venv
+    repo: https://github.com/thoslin/mfalookbook
+    uwsgi_num_instance: 1
+    uwsgi_install_from_apt: true
+    uwsgi:
+      version: 2.0.3
+      socket_timeout: 30
+      processes: 2
+      gevent:
+         workers: 10
+      socket_timeout: 30
+    rsyslog:
+      programname: ${app_name}
+      id_number: '01'
+
+  tasks:
+    # include nginx
+    # include uwsgi
+    # install required softwares
+    - name: install required softwares
+      apt: pkg={{ item }} state=present
+      with_items:
+        - python-pip
+        - python-virtualenv
+        - g++
+        - curl
+        - python-dev
+        - libxml2-dev
+        - libxslt1-dev
+        - git-core
+
+    - name: Create deployment directory
+      file: path={{ deploy_base }} state=directory
+
+    - name: Grab the code
+      shell: chdir={{ deploy_base }} /usr/bin/git clone {{ repo }} creates={{ app_dir }}
+
+    - name: Install virtualenv
+      shell: /usr/bin/virtualenv {{ venv_dir }} && {{ venv_dir }}/bin/pip install -r {{ app_dir }}/mfa/requirements.txt
+
+    - name: Set owner and group
+      file: path={{ app_dir }} state=directory recurse=yes group=ubuntu owner=ubuntu
+
+    - include: ../rsyslog/rsyslog-tasks.yml rsyslog_conf=${rsyslog} rsyslog_programname=${rsyslog.programname} rsyslog_id=${rsyslog.id_number}
+    - include: ../uwsgi/uwsgi-tasks.yml uwsgi_module=mfa:mfa:lookbook:app
+
+  handlers:
+    - include: ../rsyslog/rsyslog-handlers.yml
+    - include: ../uwsgi/uwsgi-handlers.yml

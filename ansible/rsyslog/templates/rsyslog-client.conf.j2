@@ -1,0 +1,8 @@
+$RepeatedMsgReduction off
+if $programname == 'uwsgi_{{ rsyslog_conf.programname }}' then /var/log/uwsgi_{{ rsyslog_conf.programname }}.log
+& ~
+
+if $programname == '{{ rsyslog_conf.programname }}' then /var/log/{{ rsyslog_conf.programname }}.log
+& ~
+
+
