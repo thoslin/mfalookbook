@@ -1,0 +1,43 @@
+upstream cluster {
+{% for i in range(1, nginx.workers|int + 1) %}
+        server unix:/tmp/{{ app_name }}-0{{ i }}.sock;
+{% endfor %}
+}
+
+server {
+    listen 80 default;
+    server_name _;
+
+    keepalive_timeout 5;
+
+    # path for static files
+    root {{ app_dir }}/mfa/lookbook/static;
+
+    location / {
+        ssi off;
+        autoindex off;
+
+        # checks for static file, if not found proxy to app
+        try_files $uri @proxy_to_app;
+
+    }
+
+    location @proxy_to_app {
+        proxy_buffers   16 24k;
+        proxy_buffer_size   4k;
+
+        # includes /etc/nginx/uwsgi_params file - http://uwsgi-docs.readthedocs.org/en/latest/Nginx.html
+        include uwsgi_params;
+        # additional uwsgi_params
+        uwsgi_param   Host                 $host;
+        uwsgi_param   X-Real-IP            $remote_addr;
+        uwsgi_param   X-Forwarded-For      $proxy_add_x_forwarded_for;
+        uwsgi_param   X-Forwarded-Proto    $http_x_forwarded_proto;
+
+        # below are for the HttpUwsgiModule - http://wiki.nginx.org/HttpUwsgiModule
+        uwsgi_pass cluster; # use the upstream cluster defined above
+        uwsgi_read_timeout 300; # default is 60
+        uwsgi_buffering on; # enable buffers
+        uwsgi_buffers 100 16k; # more and larger than default
+    }
+}

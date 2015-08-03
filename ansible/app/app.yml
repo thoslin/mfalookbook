@@ -5,27 +5,25 @@
   vars:
     app_name: mfalookbook
     deploy_base: /mnt/deploy
-    app_dir: ${deploy_base}/${app_name}
-    venv_dir: ${app_dir}/.venv
+    app_dir: "{{ deploy_base }}/{{ app_name }}/mfa"
+    venv_dir: "{{ app_dir }}/.venv"
     repo: https://github.com/thoslin/mfalookbook
     uwsgi_num_instance: 1
     uwsgi_install_from_apt: true
     uwsgi:
-      version: 2.0.3
+      version: 1.9.17
       socket_timeout: 30
-      processes: 2
-      gevent:
-         workers: 10
+      processes: 3
       socket_timeout: 30
+    nginx:
+      version: 1.8.0-1+precise1
+      workers: ${uwsgi_num_instance}
     rsyslog:
       programname: ${app_name}
       id_number: '01'
 
   tasks:
-    # include nginx
-    # include uwsgi
-    # install required softwares
-    - name: install required softwares
+    - name: Install required softwares
       apt: pkg={{ item }} state=present
       with_items:
         - python-pip
@@ -44,14 +42,22 @@
       shell: chdir={{ deploy_base }} /usr/bin/git clone {{ repo }} creates={{ app_dir }}
 
     - name: Install virtualenv
-      shell: /usr/bin/virtualenv {{ venv_dir }} && {{ venv_dir }}/bin/pip install -r {{ app_dir }}/mfa/requirements.txt
+      shell: /usr/bin/virtualenv {{ venv_dir }} && {{ venv_dir }}/bin/pip install -r {{ app_dir }}/requirements.txt
 
     - name: Set owner and group
       file: path={{ app_dir }} state=directory recurse=yes group=ubuntu owner=ubuntu
 
-    - include: ../rsyslog/rsyslog-tasks.yml rsyslog_conf=${rsyslog} rsyslog_programname=${rsyslog.programname} rsyslog_id=${rsyslog.id_number}
-    - include: ../uwsgi/uwsgi-tasks.yml uwsgi_module=mfa:mfa:lookbook:app
+    - name: Create crawler script
+      template: src=../app/templates/crawler.sh.j2 dest={{ app_dir }}/crawler.sh  mode=0744
+
+    - name: Set crontab for scrapy
+      cron: name="MFA crawler" day=4,7 user=root job="{{ app_dir }}/crawler.sh >> /var/log/mfa_crawler.log"
+
+    - include: ../rsyslog/rsyslog-tasks.yml rsyslog_conf={{ rsyslog }} rsyslog_programname={{ rsyslog.programname }} rsyslog_id={{ rsyslog.id_number }}
+    - include: ../uwsgi/uwsgi-tasks.yml uwsgi_module=mfa.lookbook.app:app
+    - include: ../nginx/nginx-tasks.yml
 
   handlers:
     - include: ../rsyslog/rsyslog-handlers.yml
     - include: ../uwsgi/uwsgi-handlers.yml
+    - include: ../nginx/nginx-handlers.yml

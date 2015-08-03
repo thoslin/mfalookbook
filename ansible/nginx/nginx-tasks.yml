@@ -1,0 +1,16 @@
+- name: Add nginx ppa
+  apt_repository: repo='ppa:nginx/stable'
+
+- name: Install nginx
+  apt: package=nginx={{ nginx.version }} update_cache=yes
+
+- name: Install nginx configuration
+  template: src=../nginx/templates/nginx.conf.j2 dest=/etc/nginx/nginx.conf
+
+- name: Create virtual host conf
+  template: src=../nginx/templates/vhost.mfa.conf.j2 dest=/etc/nginx/sites-available/nginx.mfa.conf
+
+- name: Create soft link to conf
+  file: path=/etc/nginx/sites-enabled/nginx.mfa.conf src=/etc/nginx/sites-available/nginx.mfa.conf  state=link force=yes
+  notify:
+    - Restart nginx

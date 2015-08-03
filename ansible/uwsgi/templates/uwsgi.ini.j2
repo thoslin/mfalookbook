@@ -29,14 +29,11 @@ gevent = {{ uwsgi.gevent.workers }}
 # Logging configurations
 # ssl-verbose is a debug-level log option
 log-syslog = uwsgi_{{ app_name }}
-{# IF YOU CHANGE THIS, CHANGE THE logstash PARSER #}
 log-format = [%(ltime)] [{{ ansible_eth0.ipv4.address }}] [%(addr)] [%(status)] [%(proto)] [%(method)] [%(micros)] [%(rsize)] [%(uri)] [] [] [%(uagent)]
 
 #Diagnostics and Monitoring configurations
-#TODO: remove stats_socket from every master yml file.
 memory-report = true
 stats = 127.0.0.1:97{{ item }}
-{# as of 1/28/14 this is not defined upstream - PGC #}
 {% if uwsgi.max_requests is defined %}
 # Automatically restart processes after this many requests
 max-requests = {{ uwsgi.max_requests }}

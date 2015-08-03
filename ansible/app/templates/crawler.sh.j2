@@ -1,0 +1,6 @@
+#!/bin/bash
+#exec 2>&1
+
+cd {{ app_dir }}
+source {{ venv_dir }}/bin/activate
+{{ venv_dir }}/bin/scrapy crawl mfa

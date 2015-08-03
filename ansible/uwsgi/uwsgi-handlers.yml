@@ -1,14 +1,14 @@
 - name: Stop uwsgi
-  action: service name={{ app_name }} state=stopped
+  service: name=${app_name} state=stopped
 
 - name: Start uwsgi
-  action: service name={{ app_name }} state=started enabled=yes
+  service: name=${app_name} state=started enabled=yes
 
 - name: Restart uwsgi
-  action: service name={{ app_name }} state=restarted enabled=yes
+  service: name=${app_name} state=restarted enabled=yes
 
 - name: Graceful Restart uwsgi
-  action: shell touch {{ app_dir }}/uwsgi-*.ini
+  shell: touch {{ app_dir }}/uwsgi-*.ini
 
 # There's a problem with reload - uwsgi gets restarted but with lower privileges,
 # so it stops because of file system perms (specifically the ssl certs)
